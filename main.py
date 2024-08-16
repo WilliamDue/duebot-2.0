@@ -18,7 +18,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if 'bro' in message.content.lower():
-        await message.channel.send('Bro, bro, are you serious bro?')
+    if 'true' in message.content.lower():
+        await message.channel.send('This is true.')
 
 client.run(open('.key', 'r').read())
