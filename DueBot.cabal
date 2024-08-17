@@ -1,0 +1,66 @@
+cabal-version:      3.0
+name:               DueBot
+version:            0.1.0.0
+-- synopsis:
+-- description:
+license:            MIT
+license-file:       LICENSE
+author:             Due
+maintainer:         williamhenrichdue@gmail.com
+-- copyright:
+category:           Web
+build-type:         Simple
+extra-doc-files:    CHANGELOG.md
+extra-source-files:
+    .token
+
+common warnings
+    ghc-options: -Wall
+
+library
+    import:           warnings
+    exposed-modules:  MyLib
+    -- other-modules:
+    default-extensions:
+        OverloadedStrings
+        TemplateHaskell
+    build-depends:
+        base ^>=4.18.2.1,
+        containers,
+        discord-haskell,
+        text,
+        unliftio,
+        file-embed
+    hs-source-dirs:   src
+    default-language: GHC2021
+
+executable DueBot
+    import:           warnings
+    main-is:          Main.hs
+    -- other-modules:
+    default-extensions:
+        OverloadedStrings
+        TemplateHaskell
+    build-depends:
+        base ^>=4.18.2.1,
+        DueBot,
+        containers,
+        discord-haskell,
+        text,
+        unliftio,
+        file-embed
+
+    hs-source-dirs:   app
+    default-language: GHC2021
+
+test-suite DueBot-test
+    import:           warnings
+    default-language: GHC2021
+    -- other-modules:
+    -- other-extensions:
+    type:             exitcode-stdio-1.0
+    hs-source-dirs:   test
+    main-is:          Main.hs
+    build-depends:
+        base ^>=4.18.2.1,
+        DueBot
