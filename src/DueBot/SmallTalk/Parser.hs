@@ -27,6 +27,10 @@ lexeme = Lexer.lexeme space
 leftEscapeChars :: [Char]
 leftEscapeChars = ['\\', '"', '/']
 
+leftEscapeCharsInRegex :: [Char]
+leftEscapeCharsInRegex = ['\\', '/']
+
+
 pEscapeChars :: [Char] -> Parser Char
 pEscapeChars ls = char '\\' *> choice (map char ls)
 
@@ -40,6 +44,13 @@ pLeftChar =
       pValid leftEscapeChars
     ]
 
+pLeftCharInRegex :: Parser Char
+pLeftCharInRegex =
+  choice
+    [ pEscapeChars leftEscapeCharsInRegex,
+      pValid leftEscapeCharsInRegex
+    ]
+
 many1 :: Parser a -> Parser [a]
 many1 p = liftA2 (:) p (many p)
 
@@ -49,7 +60,7 @@ pLiteral = Literal . toText <$> many1 pLeftChar
 pPattern :: Parser Atom
 pPattern = Pattern . toText <$> (char '/' *> aux <* char '/')
   where
-    aux = many1 pLeftChar
+    aux = many1 pLeftCharInRegex
 
 pWord :: Parser Word
 pWord = Word <$> lexeme (char '"' *> auxiliary <* char '"')
