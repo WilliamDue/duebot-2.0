@@ -14,7 +14,7 @@ escapeREText :: Text -> Text
 escapeREText = toText . escapeREString . toString
 
 wordToRegex :: Word -> Text
-wordToRegex (Word _ws) = foldMap toRegex _ws
+wordToRegex (Word _ws) = "/[ ]+/" <> foldMap toRegex _ws <> "/[ ]+/"
   where
     toRegex (Literal l) = escapeREText l
     toRegex (Pattern p) = p
@@ -56,4 +56,4 @@ ruleMatch _re text =
     then firstCapture match 
     else Nothing
   where
-    match = text ?=~ _re
+    match = (" " <> text <> " ") ?=~ _re
