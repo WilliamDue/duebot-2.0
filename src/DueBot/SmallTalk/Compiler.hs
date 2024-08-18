@@ -26,14 +26,6 @@ wordsToRegex i =
   . intercalate "|"
   . fmap wordToRegex
 
-firstCapture :: Match Text -> Maybe Int
-firstCapture =
-  (>>= (readMaybe . toString))
-  . fmap getCaptureName
-  . listToMaybe
-  . keys
-  . captureNames
-
 compileRules :: [Rule] -> Either Text RE
 compileRules rules =
   compileRegex
@@ -50,18 +42,18 @@ createTableRules rules =
     unwrap (Result r) = r
     results (Rule _ r) = map unwrap r
 
+firstCapture :: Match Text -> Maybe Int
+firstCapture match =
+  (>>= readMaybe . toString) $ getCaptureName <$> maybe_capture
+  where
+    capture_names = keys $ captureNames match
+    isCapture = isJust . flip captureMaybe match . IsCaptureName
+    maybe_capture = find isCapture capture_names
+
 ruleMatch :: RE -> Text -> Maybe Int
-ruleMatch _re text = 
+ruleMatch _re text =
   if matched match
     then firstCapture match 
     else Nothing
   where
     match = text ?=~ _re
-
--- main :: IO ()
--- main = do
---  _re <- compileRegex "-${0}([a-z]+)-"
---  let match = "haystack contains the -word- you want -test-" ?=~ _re
---  if matched match
---    then print $ firstCapture match 
---    else putTextLn "(no match)"

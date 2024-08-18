@@ -37,7 +37,10 @@ library
         file-embed,
         relude,
         megaparsec,
-        regex
+        regex,
+        array,
+        template-haskell,
+        random
     hs-source-dirs:   src
 
 executable DueBot
