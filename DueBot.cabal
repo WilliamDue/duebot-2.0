@@ -31,7 +31,7 @@ library
         DueBot.EventHandler
         DueBot.Main
     build-depends:
-        base ^>=4.18.2.1,
+        base,
         discord-haskell,
         unliftio,
         file-embed,
@@ -47,7 +47,7 @@ executable DueBot
     import:           common
     main-is:          Main.hs
     build-depends:
-        base ^>=4.18.2.1,
+        base,
         relude,
         DueBot
     hs-source-dirs:   app
@@ -58,5 +58,5 @@ test-suite DueBot-test
     hs-source-dirs:   test
     main-is:          Main.hs
     build-depends:
-        base ^>=4.18.2.1,
+        base,
         DueBot
