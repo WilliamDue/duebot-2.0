@@ -1,7 +1,7 @@
 let
   pkgs = import <nixpkgs> { config.allowUnfree = true; };
   unstable = import <nixos-unstable> { };
-  compilerVersion = "ghc96"; 
+  compilerVersion = "ghc98"; 
   compiler = pkgs.haskell.packages."${compilerVersion}";
 in
 let pkg =
