@@ -84,7 +84,7 @@ jobs:
         docker run --platform linux/arm64 \
           -v ${{ github.workspace }}:/workspace \
           -w /workspace \
-          haskell: 9.8 \
+          haskell:9.8 \
           bash -c "
             cabal update && \
             cabal build && \
