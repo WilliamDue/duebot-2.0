@@ -13,7 +13,6 @@ jobs:
     strategy:
       matrix:
         include:
-          # Linux builds
           - os: ubuntu-latest
             arch: x86_64
             platform: linux
@@ -53,7 +52,7 @@ jobs:
     - name: Find executable
       id: find-exe
       run: |
-        EXE_PATH=$(cabal list-bin DueBot)
+        EXE_PATH=$(cabal list-bin duebot)
         echo "exe_path=$EXE_PATH" >> $GITHUB_OUTPUT
         echo "Found executable at: $EXE_PATH"
 
@@ -62,32 +61,10 @@ jobs:
 
     - name: Copy binary
       run: |
-        cp ${{ steps.find-exe.outputs. exe_path }} artifacts/duebot-${{ matrix.platform }}-${{ matrix.arch }}
+        cp ${{ steps.find-exe.outputs.exe_path }} artifacts/duebot-${{ matrix.platform }}-${{ matrix.arch }}
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name:  duebot-${{ matrix.platform }}-${{ matrix.arch }}
         path: artifacts/duebot-${{ matrix.platform }}-${{ matrix.arch }}
-
-  # Optional: Create release with binaries
-  release:
-    name: Create Release
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.event_name == 'release'
-    steps:
-    - name: Download all artifacts
-      uses: actions/download-artifact@v4
-      with:
-        path: binaries
-
-    - name: Display structure of downloaded files
-      run: ls -R binaries
-
-    - name: Upload Release Assets
-      uses: softprops/action-gh-release@v1
-      with:
-        files:  binaries/*/*
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
