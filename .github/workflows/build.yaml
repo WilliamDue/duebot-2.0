@@ -7,12 +7,12 @@ on:
     branches: [ main ]
 
 jobs:
-  build: 
+  build:
     name: Build on ${{ matrix.os }} - ${{ matrix.arch }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        include:
+        include: 
           - os: ubuntu-latest
             arch: x86_64
             platform: linux
@@ -25,14 +25,14 @@ jobs:
 
     - name: Set up Haskell
       uses: haskell-actions/setup@v2
-      with: 
+      with:
         ghc-version: '9.8'
         cabal-version: '3.14'
 
     - name: Cache Cabal packages
       uses: actions/cache@v3
       with:
-        path:  |
+        path: |
           ~/.cabal/packages
           ~/.cabal/store
           dist-newstyle
@@ -46,7 +46,7 @@ jobs:
     - name: Build dependencies
       run: cabal build --only-dependencies
 
-    - name: Build project
+    - name:  Build project
       run: cabal build
 
     - name: Find executable
@@ -65,7 +65,7 @@ jobs:
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
-      with:
+      with: 
         name: duebot-${{ matrix.platform }}-${{ matrix.arch }}
         path: artifacts/duebot-${{ matrix.platform }}-${{ matrix.arch }}
 
@@ -96,8 +96,8 @@ jobs:
         draft: false
         prerelease: false
         files: |
-          release-artifacts/duebot-linux-x86_64
-          release-artifacts/duebot-linux-arm64
+          release-artifacts/duebot-linux-x86_64/duebot-linux-x86_64
+          release-artifacts/duebot-linux-arm64/duebot-linux-arm64
         generate_release_notes: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
