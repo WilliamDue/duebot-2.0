@@ -73,10 +73,21 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
+    - name: Cache Cabal packages (ARM64)
+      uses: actions/cache@v3
+      with: 
+        path: |
+          cabal-cache
+        key: linux-arm64-cabal-${{ hashFiles('**/*.cabal', '**/cabal.project') }}
+        restore-keys: |
+          linux-arm64-cabal-
+
     - name: Build ARM64 binary in Docker
       run: |
+        mkdir -p cabal-cache
         docker run --platform linux/arm64 \
           -v ${{ github.workspace }}:/workspace \
+          -v ${{ github.workspace }}/cabal-cache:/root/.cabal \
           -w /workspace \
           haskell:9.8 \
           bash -c "
