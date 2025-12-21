@@ -16,9 +16,6 @@ jobs:
           - os: ubuntu-latest
             arch: x86_64
             platform: linux
-          - os: ubuntu-24.04-arm64
-            arch: arm64
-            platform: linux
 
     steps:
     - uses: actions/checkout@v4
@@ -68,6 +65,38 @@ jobs:
       with: 
         name: duebot-${{ matrix.platform }}-${{ matrix.arch }}
         path: artifacts/duebot-${{ matrix.platform }}-${{ matrix.arch }}
+
+  build-arm64:
+    name: Build ARM64
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses:  actions/checkout@v4
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Set up Docker Buildx
+      uses:  docker/setup-buildx-action@v3
+
+    - name:  Build ARM64 binary in Docker
+      run: |
+        docker run --platform linux/arm64 \
+          -v ${{ github.workspace }}:/workspace \
+          -w /workspace \
+          haskell: 9.8 \
+          bash -c "
+            cabal update && \
+            cabal build && \
+            mkdir -p artifacts && \
+            cp \$(cabal list-bin duebot) artifacts/duebot-linux-arm64
+          "
+
+    - name: Upload ARM64 artifact
+      uses: actions/upload-artifact@v4
+      with: 
+        name: duebot-linux-arm64
+        path:  artifacts/duebot-linux-arm64
 
   release:
     name: Create Release
