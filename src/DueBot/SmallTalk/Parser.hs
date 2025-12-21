@@ -1,19 +1,24 @@
-module DueBot.SmallTalk.Parser (
-  rulesFromText,
-  Rule (..),
-  Atom (..),
-  Word (..),
-  Result (..)) where
+module DueBot.SmallTalk.Parser
+  ( rulesFromText,
+    Rule (..),
+    Atom (..),
+    Word (..),
+    Result (..),
+  )
+where
 
-import Relude hiding (many, Word)
 import Data.Char
+import Relude hiding (Word, many)
 import Text.Megaparsec
 import Text.Megaparsec.Char (char, space1)
 import Text.Megaparsec.Char.Lexer qualified as Lexer
 
 data Atom = Literal !Text | Pattern !Text deriving (Show, Eq, Ord)
+
 newtype Word = Word [Atom] deriving (Show, Eq, Ord)
+
 newtype Result = Result Text deriving (Show, Eq, Ord)
+
 data Rule = Rule ![Word] ![Result] deriving (Show, Eq, Ord)
 
 type Parser = Parsec Void Text
@@ -29,7 +34,6 @@ leftEscapeChars = ['\\', '"', '/']
 
 leftEscapeCharsInRegex :: [Char]
 leftEscapeCharsInRegex = ['\\', '/']
-
 
 pEscapeChars :: [Char] -> Parser Char
 pEscapeChars ls = char '\\' *> choice (map char ls)
@@ -103,4 +107,4 @@ pRules = many pRule
 rulesFromText :: FilePath -> Text -> Either Text [Rule]
 rulesFromText fname s =
   either (Left . toText . errorBundlePretty) Right
-  $ parse (pRules <* eof) fname s
+    $ parse (pRules <* eof) fname s

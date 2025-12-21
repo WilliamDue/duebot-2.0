@@ -12,9 +12,7 @@ category:           Web
 build-type:         Simple
 extra-doc-files:    CHANGELOG.md
 extra-source-files:
-    .token
-    rules.cfg
-
+        
 common common
     ghc-options: -Wall    
     default-language: GHC2021
@@ -43,7 +41,7 @@ library
         random
     hs-source-dirs:   src
 
-executable DueBot
+executable duebot
     import:           common
     main-is:          Main.hs
     build-depends:
