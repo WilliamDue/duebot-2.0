@@ -1,1 +1,2 @@
-# duebot-2.0
+# DueBot
+This is a silly bot. 
